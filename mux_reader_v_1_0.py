@@ -1,0 +1,52 @@
+import time
+import datetime
+import RPi.GPIO as GPIO
+
+# Initial setup stuff
+GPIO.setmode(GPIO.BOARD)
+
+GPIO.setup(11, GPIO.OUT) # s0
+GPIO.setup(13, GPIO.OUT) # s1
+GPIO.setup(15, GPIO.OUT) # s2
+GPIO.setup(18, GPIO.IN)	# Signal input
+
+s0 = [0,1,0,1,0,1,0,1] # s0 values
+s1 = [0,0,1,1,0,0,1,1] # s1 values
+s2 = [0,0,0,0,1,1,1,1] # s2 values
+signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
+
+def s0_pin(x,y):
+    GPIO.output(x,y)
+
+def s1_pin(x,y):
+    GPIO.output(x,y)
+
+def s2_pin(x,y):
+    GPIO.output(x,y)
+
+def current_readings():
+    signal = GPIO.input(18)
+    print()
+    print("Multiplexer readings: ")
+    print("----------------------")
+    for i in range(8):
+        s0_pin(11,s0[i])
+        s1_pin(13,s1[i])
+        s2_pin(15,s2[i])
+        if signal:
+            signal_reading[i] = 1
+        else:
+            signal_reading[i] = 0
+        print(i," = ", s0[i],s1[i],s2[i],"Reading: ",signal_reading[i])
+    print("-----------------------")
+
+def main():
+    try:
+        while True:
+            current_readings()
+            time.sleep(5)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+
+if __name__=="__main__":
+	main()
