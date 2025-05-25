@@ -2,6 +2,13 @@ import time
 import datetime
 import RPi.GPIO as GPIO
 
+######################### --- Documentation --- ###############################
+#
+# RPi.GPIO module: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
+# Inspired by: https://forums.raspberrypi.com/viewtopic.php?t=267959
+#
+###############################################################################
+
 # Initial setup stuff
 GPIO.setmode(GPIO.BOARD)
 
