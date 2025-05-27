@@ -34,7 +34,6 @@ def s2_pin(x,y):
 def current_readings():
     timestamp = time.time()
     stamp = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-    signal = GPIO.input(18)
     print()
     print("Multiplexer readings at " + stamp + " : ")
     print("----------------------")
@@ -42,6 +41,7 @@ def current_readings():
         s0_pin(11,s0[i])
         s1_pin(13,s1[i])
         s2_pin(15,s2[i])
+        signal = GPIO.input(18)
         if signal:
             signal_reading[i] = 1
         else:
