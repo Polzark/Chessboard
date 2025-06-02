@@ -22,38 +22,34 @@ s1 = [0,0,1,1,0,0,1,1] # s1 values
 s2 = [0,0,0,0,1,1,1,1] # s2 values
 signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
 
-def s0_pin(x,y):
-    GPIO.output(x,y)
-
-def s1_pin(x,y):
-    GPIO.output(x,y)
-
-def s2_pin(x,y):
-    GPIO.output(x,y)
-
 def current_readings():
     timestamp = time.time()
     stamp = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+
     print()
     print("Multiplexer readings at " + stamp + " : ")
     print("----------------------")
+
     for i in range(8):
-        s0_pin(11,s0[i])
-        s1_pin(13,s1[i])
-        s2_pin(15,s2[i])
+        GPIO.output(11,s0[i]) # s0_pin
+        GPIO.output(13,s1[i]) # s1_pin
+        GPIO.output(15,s2[i]) # s2_pin
+
         signal = GPIO.input(18)
         if signal:
             signal_reading[i] = 1
         else:
             signal_reading[i] = 0
+
         print(i," = ", s0[i],s1[i],s2[i],"Reading: ",signal_reading[i])
+
     print("-----------------------")
 
 def main():
     try:
         while True:
             current_readings()
-            time.sleep(5)
+            time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
 
