@@ -15,7 +15,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.OUT) # s0
 GPIO.setup(13, GPIO.OUT) # s1
 GPIO.setup(15, GPIO.OUT) # s2
-GPIO.setup(18, GPIO.IN)	# Signal input
+GPIO.setup(18, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
 
 s0 = [0,1,0,1,0,1,0,1] # s0 values
 s1 = [0,0,1,1,0,0,1,1] # s1 values
