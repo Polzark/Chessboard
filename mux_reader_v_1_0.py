@@ -49,7 +49,7 @@ def main():
     try:
         while True:
             current_readings()
-            time.sleep(1)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         GPIO.cleanup()
 
