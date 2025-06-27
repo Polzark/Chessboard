@@ -13,6 +13,9 @@ import chess
 # Inspired by: 
 # https://forums.raspberrypi.com/viewtopic.php?t=267959
 #
+# Chess wiki:
+# https://chess.fandom.com/wiki/Notation#Algebraic_notation
+#
 ###############################################################################
 
 ###############################################################################
