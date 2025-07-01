@@ -87,6 +87,22 @@ def put_sig_reading_in_chessboard():
     for row in range(8):
         chessboard_binary_curr[row][0] = signal_reading[row]
 
+# Col = file (eg. A), Row = rank (eg. 1)
+def get_legal_moves(file, rank):
+    # Do stuff
+    pass
+
+def light_up_squares():
+    # Do more stuff
+    pass
+
+def move_piece(from_square, to_square):
+    # Do even more stuff lol
+    # Might use:
+    # remove_piece_at(square: chess.Square)→ Piece | None
+    # set_piece_at(square: chess.Square, piece: Piece | None, promoted: bool = False)→ None
+    pass
+
 ###############################################################################
 
 ###############################################################################
