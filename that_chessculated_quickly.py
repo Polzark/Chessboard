@@ -10,6 +10,9 @@ import chess
 # RPi.GPIO module: 
 # https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
 #
+# chess module:
+# https://python-chess.readthedocs.io/en/latest/index.html
+#
 # Inspired by: 
 # https://forums.raspberrypi.com/viewtopic.php?t=267959
 #
