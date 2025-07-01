@@ -102,7 +102,7 @@ def get_legal_moves(file, rank):
 
     if curr_piece is None:
         print("EEK! get_legal_moves died lol")
-        return
+        return None
 
     legal_moves = []
     for curr_legal_move in board.legal_moves:
