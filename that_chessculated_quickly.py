@@ -88,11 +88,27 @@ def put_sig_reading_in_chessboard():
         chessboard_binary_curr[row][0] = signal_reading[row]
 
 # Col = file (eg. A), Row = rank (eg. 1)
+# returns an array of squares.
+# Can get file and rank by using:
+#   chess.square_file(square: chess.Square)→ int
+#   chess.square_rank(square: chess.Square)→ int
 def get_legal_moves(file, rank):
     # Do stuff
-    pass
+    curr_square = chess.square(file, rank)
+    curr_piece = board.piece_at(curr_square)
 
-def light_up_squares():
+    if curr_piece is None:
+        print("EEK! get_legal_moves died lol")
+        return
+
+    legal_moves = []
+    for curr_legal_move in board.legal_moves:
+        if curr_legal_move.from_square == curr_square:
+            legal_moves.append(curr_legal_move.to_square)
+    
+    return legal_moves
+        
+def light_up_squares(legal_moves):
     # Do more stuff
     pass
 
