@@ -1,5 +1,8 @@
 import numpy as np
 from constants import * 
+import chess
+from cali_mux import *
+from Game import *
 
 # Create start positions
 Start = [[0 for _ in range(COLS)] for _ in range(ROWS)]
@@ -10,3 +13,22 @@ print(Start)
 
 
 # Start game
+chessboard = chess.Board()
+previous_board = copy_board()
+game = Game(chessboard)
+
+while not chessboard.is_game_over():
+    current_readings()
+
+    # Check for changes
+    changes = find_changes(previous_board)
+    if changes:
+        print(f"\nDetected {len(changes)} change(s):")
+        for change in changes:
+            print(f"  {change['square']}: piece {change['action']}")
+        game.calc(changes, chessboard)
+    
+    display_chessboard()
+    previous_board = copy_board()
+    
+    time.sleep(0.5)  # Slightly longer delay for chess moves
