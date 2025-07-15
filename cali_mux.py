@@ -134,15 +134,15 @@ def set_square_state(square, state):
         return True
     return False
 
-def find_changes(previous_board):
+def find_changes(curr_board, previous_board):
     """Find changes between current board and previous board state"""
     changes = []
     for row in range(8):
         for col in range(8):
-            if chessboard[row][col] != previous_board[row][col]:
+            if curr_board[row][col] != previous_board[row][col]:
                 square = files[col] + ranks[row]
                 old_state = previous_board[row][col]
-                new_state = chessboard[row][col]
+                new_state = curr_board[row][col]
                 changes.append({
                     'square': square,
                     'from': old_state,

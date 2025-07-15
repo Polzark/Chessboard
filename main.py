@@ -13,11 +13,11 @@ print(Start)
 
 
 # Start game
-board = chess.Board()
+chessboard = chess.Board()
 previous_board = copy_board()
-game = Game(board)
+game = Game(chessboard)
 
-while not board.is_game_over():
+while not chessboard.is_game_over():
     current_readings()
 
     # Check for changes
@@ -26,8 +26,7 @@ while not board.is_game_over():
         print(f"\nDetected {len(changes)} change(s):")
         for change in changes:
             print(f"  {change['square']}: piece {change['action']}")
-            
-        game.calc(changes['square'][0])
+        game.calc(changes, chessboard)
     
     display_chessboard()
     previous_board = copy_board()
