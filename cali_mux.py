@@ -1,6 +1,7 @@
 import time
 import datetime
 import RPi.GPIO as GPIO
+import chess
 
 ###############################################################################
 ######################### --- Documentation --- ###############################
@@ -39,7 +40,7 @@ signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
 chessboard = [[0 for _ in range(8)] for _ in range(8)]
 
 # Chess notation mapping
-files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 
 # Mapping from multiplexer channel to chess square
@@ -91,9 +92,11 @@ def current_readings():
         # Update 2D chessboard array
         # Note: This assumes first 8 channels map to first row
         # You'll need to adjust mapping based on your physical setup
+
+        # Made a change so its reading first column - Steph
         if i < 8:
-            row = 0  # For now, just using first row
-            col = i
+            row = i
+            col = 0
             chessboard[row][col] = signal_reading[i]
         
         # Display with chess notation
@@ -152,6 +155,7 @@ def copy_board():
     """Create a deep copy of the current board state"""
     return [row[:] for row in chessboard]
 
+
 ###############################################################################
 ###############################################################################
 ############################ --- The Magic --- ################################
@@ -159,6 +163,7 @@ def copy_board():
 
 def main():
     previous_board = copy_board()
+    board = chess.Board()
     
     try:
         while True:
@@ -167,6 +172,7 @@ def main():
             # Check for changes
             changes = find_changes(previous_board)
             if changes:
+                legal_moves = board.legal_moves
                 print(f"\nDetected {len(changes)} change(s):")
                 for change in changes:
                     print(f"  {change['square']}: piece {change['action']}")
