@@ -2,14 +2,14 @@ from constants import *
 import chess
 import board
 import neopixel
+from cali_mux import *
 
 class Game:
     def __init__(self, chessboard):
         self.chessboard = chessboard    # updates after every legal move
         self.interimboard = chessboard  # updates after pick up, put down
         self.game_state = Pickup_State(PieceColour.WHITE, self) # White player first
-        self.curr_lights = []           # current lights that are on to show possible moves
-        self.pixels = neopixel.NeoPixel(board.D18, 8)
+        self.pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False)
     
     # find all legal moves from a given square
     def find_squares(self, square):
@@ -23,20 +23,27 @@ class Game:
     def calc(self, square, chessboard):
         self.game_state.piece_change(square)
 
-    # lights up all the given squares and adds them to curr_light
+    # lights up all the given squares
     def lightup_squares(self, squares):
         for square in squares:
             ## convert to row and col index
             row = chess.square_file(square)
             col = chess.square_rank(square)
             if (col == 0):
-                self.pixels[row] = neopixel.fill(255,0,0)
-                self.curr_lights.append(squares)
+                self.pixels[row] = (255,0,0)
+        self.pixels.show()
     
-    # lights up all squares on the chessboard for error stuff, could merge with lightup_squares
+    # Lights up all lights with the colour red (chatgpt said that double brackets work
+    # i believe in it)
     def error_lightup(self):
-        for row in range(ROWS):
-            self.pixels[row] = neopixel.fill(0,255,0)
+        self.pixels.fill((0, 255, 0))
+        self.pixels.show()
+    
+    # turn all lights off
+    def revert_lights(self):
+        self.pixels.fill((0, 0, 0))
+        self.pixels.show()
+        self.curr_lights = []
 
     # just to change state of the game
     def change_state(self, game_state):
@@ -77,5 +84,8 @@ class Error_State(Game_State):
         self.prev_state = prev_state
 
     def piece_change(self, changes, chessboard):
-        # ah this very sus lmao
-        
+        same = find_changes(self.game.interimboard, chessboard)
+        if not same:
+            self.game.error_lightup()
+        else:
+            self.game.revert_lights()

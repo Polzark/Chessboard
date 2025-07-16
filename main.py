@@ -21,7 +21,7 @@ while not chessboard.is_game_over():
     current_readings()
 
     # Check for changes
-    changes = find_changes(previous_board)
+    changes = find_changes(chessboard, previous_board)
     if changes:
         print(f"\nDetected {len(changes)} change(s):")
         for change in changes:
