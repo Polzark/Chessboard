@@ -139,10 +139,10 @@ def find_changes(previous_board):
     changes = []
     for row in range(8):
         for col in range(8):
-            if curr_board[row][col] != previous_board[row][col]:
+            if chessboard[row][col] != previous_board[row][col]:
                 square = files[col] + ranks[row]
                 old_state = previous_board[row][col]
-                new_state = curr_board[row][col]
+                new_state = chessboard[row][col]
                 changes.append({
                     'square': square,
                     'from': old_state,
