@@ -134,7 +134,7 @@ def set_square_state(square, state):
         return True
     return False
 
-def find_changes(curr_board, previous_board):
+def find_changes(previous_board):
     """Find changes between current board and previous board state"""
     changes = []
     for row in range(8):
