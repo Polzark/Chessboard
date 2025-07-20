@@ -10,14 +10,16 @@ class Game:
         self.interimboard = chessboard  # updates after pick up, put down
         self.game_state = Pickup_State(PieceColour.WHITE, self) # White player first
         self.pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False)
+        self.legal_squares = []
+        self.from_square = -1
     
     # find all legal moves from a given square
     def find_squares(self, square):
-        squares = []
+        self.legal_squares = []
         for move in self.chessboard.legal_moves:
             if move.from_square == square:
-                squares.append(chess.square_name(move.to_square))
-        return squares
+                self.legal_squares.append(chess.square_name(move.to_square))
+        return self.legal_squares
     
     # just calls the state function
     def calc(self, square, chessboard):
@@ -49,6 +51,13 @@ class Game:
     def change_state(self, game_state):
         self.game_state = game_state
 
+    def is_legal_square(self, square):
+        for sq in self.legal_squares:
+            if (chess.parse_square(square) == sq):
+                return True
+        return False
+
+
     
 class Game_State:
     def __init__(self, colour, game):
@@ -67,7 +76,10 @@ class Pickup_State(Game_State):
     def piece_change(self, changes, chessboard):
         if self.same_colour(changes[0]['square']) and changes[0]['action'] == 'removed':
             squares = self.game.find_squares(chess.parse_square(changes[0]['square']))
+            self.game.legal_squares = squares
+            self.game.from_square = chess.parse_square(changes[0]['square'])
             self.game.lightup_squares(squares)
+            self.game.interimboard = chessboard
             self.game.change_state(Putdown_State(self.colour, self.game))
         else:
             self.game.change_state(Error_State(self.colour, self.game, self))
@@ -75,8 +87,37 @@ class Pickup_State(Game_State):
         
 
 class Putdown_State(Game_State):
+    def __init__(self, colour, game):
+        super().__init__(colour, game)
+        self.capture = False
+        self.capture_square = -1
+
     def piece_change(self, changes, chessboard):
-        self.game.chessboard
+        # if change is put down, check if chosen square is valid and has not captured already
+        if self.game.is_legal_square(changes[0]['square']) and changes[0]['action'] == 'placed' and self.capture == False:
+            self.finalise_move(chess.parse_square(changes[0]['square']))
+        # if change is a pick up, check if it is a valid pick up
+        # 1. the square is part of legal_squares
+        # 2. the piece is of the opposite colour
+        elif self.game.is_legal_square(changes[0]['square']) and changes[0]['action'] == 'removed' and self.capture == False and not self.same_colour(changes[0]['square']):
+            self.capture = True
+            self.capture_square = chess.parse_square(changes[0]['square'])
+        
+        # if change is put down and a piece has been captured already,
+        # must make sure the put down square is the same
+        elif self.capture_square == chess.parse_square(changes[0]['square']) and changes[0]['action'] == 'placed':
+            self.finalise_move(chess.parse_square(changes[0]['square']))
+        else:
+            self.game.change_state(Error_State(self.colour, self.game, self))
+            self.game.error_lightup()
+    
+    def finalise_move(self, to_square):
+            self.game.chessboard.push(chess.Move(self.game.from_square, to_square))
+            self.game.revert_lights()
+            self.game.interimboard = chessboard
+            self.game.from_square = -1
+            self.game.change_state(Pickup_State(not self.colour, self.game))
+        
 
 class Error_State(Game_State):
     def __init__(self, colour, game, prev_state):
@@ -89,3 +130,4 @@ class Error_State(Game_State):
             self.game.error_lightup()
         else:
             self.game.revert_lights()
+            self.game.game_state = self.prev_state
