@@ -133,3 +133,6 @@ Select the correct interpreter:
 - Type Ctrl+P (Quick Open)
 - In there, select `> Python: Select Interpreter`
 - Choose `Python 3.10.12 (.cheesevirtualenv) ./.cheesevirtualenv/bin/python`
+
+## Da Pins
+![alt text](image.png)
