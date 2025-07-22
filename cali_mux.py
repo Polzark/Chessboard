@@ -21,11 +21,16 @@ import chess
 ###############################################################################
 ###################### --- Initial Setup Stuff --- ############################
 ###############################################################################
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT) # s0
-GPIO.setup(13, GPIO.OUT) # s1
-GPIO.setup(15, GPIO.OUT) # s2
-GPIO.setup(18, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
+GPIO.setmode(GPIO.BCM)
+# Comments are for GPIO.BOARD
+S0_PIN = 17 # 11
+S1_PIN = 27 # 13
+S2_PIN = 22 # 15
+SIG_PIN = 24 # 18
+GPIO.setup(S0_PIN, GPIO.OUT) # s0
+GPIO.setup(S1_PIN, GPIO.OUT) # s1
+GPIO.setup(S2_PIN, GPIO.OUT) # s2
+GPIO.setup(SIG_PIN, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
 
 s0 = [0,1,0,1,0,1,0,1] # s0 values
 s1 = [0,0,1,1,0,0,1,1] # s1 values
@@ -81,12 +86,12 @@ def current_readings():
     
     # Read all 8 channels
     for i in range(8):
-        GPIO.output(11, s0[i]) # s0_pin
-        GPIO.output(13, s1[i]) # s1_pin
-        GPIO.output(15, s2[i]) # s2_pin
+        GPIO.output(S0_PIN, s0[i]) # s0_pin
+        GPIO.output(S1_PIN, s1[i]) # s1_pin
+        GPIO.output(S2_PIN, s2[i]) # s2_pin
         time.sleep(0.001)  # Small delay for signal stability
         
-        signal = GPIO.input(18)
+        signal = GPIO.input(SIG_PIN)
         signal_reading[i] = 1 if signal else 0
         
         # Update 2D chessboard array
