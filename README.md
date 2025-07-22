@@ -1,5 +1,7 @@
-Hello hello helloo
-gonna be writing about the Game class and Game_state stuff
+### Hello hello helloo 
+*gonna be writing about the Game class and Game_state stuff*
+
+<br>
 
 The Game will store two different chessboards:
 
@@ -12,9 +14,9 @@ The Game will store two different chessboards:
 The game will also store all the lights attached to the chessboard and which ones
 currently on.
 
-Game State Stuff
+## Game State Stuff
 
-there are three different game_states:
+There are three different game_states:
 
 1. Pickup_state
    The player needs to pick up a piece of the same colour and all the possible
