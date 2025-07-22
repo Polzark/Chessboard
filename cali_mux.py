@@ -25,6 +25,8 @@ import chess
 if GPIO.getmode() is None:
     GPIO.setmode(GPIO.BCM)
 
+GPIO.setwarnings(False)
+
 # Comments are for GPIO.BOARD
 S0_PIN = 17 # 11
 S1_PIN = 27 # 13
