@@ -32,7 +32,8 @@ import chess
 # GPIO.setup(15, GPIO.OUT) # s2
 # GPIO.setup(18, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
 
-GPIO.setmode(GPIO.BCM)
+if GPIO.getmode() is None:
+    GPIO.setmode(GPIO.BCM)
 
 # Comments are for GPIO.BOARD
 S0_PIN = 17 # 11
@@ -93,7 +94,7 @@ def current_readings():
         time.sleep(0.001)  # Small delay for signal stability
         
         signal = GPIO.input(SIG_PIN)
-        
+
         if signal:
             signal_reading[i] = 1
         else:

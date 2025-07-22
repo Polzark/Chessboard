@@ -21,7 +21,10 @@ import chess
 ###############################################################################
 ###################### --- Initial Setup Stuff --- ############################
 ###############################################################################
-GPIO.setmode(GPIO.BCM)
+
+if GPIO.getmode() is None:
+    GPIO.setmode(GPIO.BCM)
+
 # Comments are for GPIO.BOARD
 S0_PIN = 17 # 11
 S1_PIN = 27 # 13
