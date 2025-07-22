@@ -60,16 +60,31 @@ For best practices, you will have to install the packages in a virtual machine.
 To set it up, you can run these commands.
 
 ```
-$ python3 -m venv .cheesevenv
-$ source .cheesevenv/bin/activate
+$ cd ChessBoard/
+$ python3 -m venv .cheesevirtualenv --system-site-packages
+$ source .cheesevirtualenv/bin/activate
 $ pip install chess
 $ pip install RPi.GPIO
 $ pip3 install rpi_ws281x adafruit-circuitpython-neopixel
-$ pip install board
 $ pip install numpy
 ```
 
-This should create a `.cheesevenv` folder that should resolve the module import issues.
+If you are on the Raspberry Pi 3 Model B V1.2, continue with:
+
+```
+$ pip3 install --upgrade adafruit-python-shell
+$ wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+$ sudo -E env "PATH=$VIRTUAL_ENV/bin:$PATH" python3 raspi-blinka.py
+```
+
+If you are setting up just for the packages (not on a Raspberry Pi):
+
+```
+$ sudo apt-get install -y i2c-tools libgpiod-dev python3-libgpiod
+$ pip install --upgrade adafruit-blinka
+```
+
+This should create a `.cheesevirtualenv` folder that should resolve the module import issues.
 <br>
 
 To exit the virtual environment, you can use this command.
@@ -81,7 +96,7 @@ $ deactivate
 Later on you can enter the virtual environment again by just running this command.
 
 ```
-$ source .cheesevenv/bin/activate
+$ source .cheesevirtualenv/bin/activate
 ```
 
 ## Why is this required?
@@ -111,3 +126,10 @@ hint: See PEP 668 for the detailed specification.
 ```
 
 For furthur reading, you can refer to: https://medium.com/@Po1s1n/tackling-the-externally-managed-environment-error-while-using-pip3-6d45b367c561
+
+## Still have problems with your Python interpreter?
+Select the correct interpreter:
+
+- Type Ctrl+P (Quick Open)
+- In there, select `> Python: Select Interpreter`
+- Choose `Python 3.10.12 (.cheesevirtualenv) ./.cheesevirtualenv/bin/python`
