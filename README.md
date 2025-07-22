@@ -56,13 +56,7 @@ there are three different game_states:
 
 
 # Setup
-If you are using `WSL2 on Windows` or are working in a `virtual machine`, you can just
-
-```
-$ pip install chess
-$ pip install RPi.GPIO
-```
-and you should be good to go. However, if you are using `macOS` or `Linux`, you will have to install the packages in a virtual machine.
+For best practices, you will have to install the packages in a virtual machine.
 To set it up, you can run these commands.
 
 ```
@@ -70,6 +64,9 @@ $ python3 -m venv .cheesevenv
 $ source .cheesevenv/bin/activate
 $ pip install chess
 $ pip install RPi.GPIO
+$ pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+$ pip install board
+$ pip install numpy
 ```
 
 This should create a `.cheesevenv` folder that should resolve the module import issues.
