@@ -37,3 +37,4 @@ try:
 
 except KeyboardInterrupt:
     print("\nI'm dyinggg...")
+    GPIO.cleanup()

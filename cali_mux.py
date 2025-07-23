@@ -50,18 +50,18 @@ signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
 chessboard = [[0 for _ in range(8)] for _ in range(8)]
 
 # Chess notation mapping
-files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 
 # Mapping from multiplexer channel to chess square
 # You may need to adjust this based on your physical board wiring
-def channel_to_square(channel):
-    """Convert multiplexer channel (0-7) to chess square notation"""
-    if channel < 8:
-        row = channel // 8
-        col = channel % 8
-        return files[col] + ranks[row]
-    return "Invalid"
+# def channel_to_square(channel):
+#     """Convert multiplexer channel (0-7) to chess square notation"""
+#     if channel < 8:
+#         row = channel // 8
+#         col = channel % 8
+#         return files[col] + ranks[row]
+#     return "Invalid"
 
 def square_to_coords(square):
     """Convert chess square notation (e.g., 'A1') to board coordinates"""
@@ -100,7 +100,7 @@ def current_readings():
         signal_reading[i] = 1 if signal else 0
         
         # Update 2D chessboard array
-        # Note: This assumes first 8 channels map to first row
+        # Note: This assumes first 8 channels map to first col
         # You'll need to adjust mapping based on your physical setup
 
         # Made a change so its reading first column - Steph
@@ -110,7 +110,7 @@ def current_readings():
             chessboard[row][col] = signal_reading[i]
         
         # Display with chess notation
-        square = channel_to_square(i)
+        square = files[col] + ranks[row]
         print(f"Channel {i:2d} [{files[i] if i < 8 else '?'}1] = {s0[i]}{s1[i]}{s2[i]} Reading: {signal_reading[i]}")
     
     print("-" * 50)
