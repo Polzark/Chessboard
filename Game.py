@@ -23,7 +23,7 @@ class Game:
     
     # just calls the state function
     def calc(self, square, chessboard):
-        self.game_state.piece_change(square)
+        self.game_state.piece_change(square, chessboard)
 
     # lights up all the given squares
     def lightup_squares(self, squares):
