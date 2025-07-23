@@ -14,12 +14,12 @@ print(Start)
 
 
 # Start game
-chessboard = chess.Board()
+chess_board = chess.Board()
 previous_board = copy_board()
-game = Game(chessboard)
+game = Game(chess_board)
 
 try:
-    while not chessboard.is_game_over():
+    while not chess_board.is_game_over():
         current_readings()
 
         # Check for changes
