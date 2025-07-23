@@ -111,7 +111,7 @@ def current_readings():
         
         # Display with chess notation
         square = files[col] + ranks[row]
-        print(f"Channel {i:2d} [{files[i] if i < 8 else '?'}1] = {s0[i]}{s1[i]}{s2[i]} Reading: {signal_reading[i]}")
+        print(f"Channel {i:2d} [{square}] = "f"{s0[i]}{s1[i]}{s2[i]}  Reading: {signal_reading[i]}")
     
     print("-" * 50)
 
