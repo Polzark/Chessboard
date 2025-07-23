@@ -2,7 +2,8 @@ import numpy as np
 from constants import * 
 import chess
 from cali_mux import chessboard as incoming_board_data, copy_board, current_readings, display_chessboard, find_changes
-
+import RPi.GPIO as GPIO
+import time
 from Game import *
 
 # Create start positions

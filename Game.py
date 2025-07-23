@@ -2,12 +2,12 @@ from constants import *
 import chess
 import board
 import neopixel
-from cali_mux import *
+from cali_mux import find_changes, copy_board
 
 class Game:
     def __init__(self, chessboard):
         self.chessboard = chessboard    # updates after every legal move
-        self.interimboard = chessboard  # updates after pick up, put down
+        self.interimboard = copy_board()  # updates after pick up, put down
         self.game_state = Pickup_State(PieceColour.WHITE, self) # White player first
         self.pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False) # D18 is physical/GPIO.BOARD pin 12
         self.legal_squares = []
@@ -79,7 +79,7 @@ class Pickup_State(Game_State):
             self.game.legal_squares = squares
             self.game.from_square = chess.parse_square(changes[0]['square'])
             self.game.lightup_squares(squares)
-            self.game.interimboard = chessboard
+            self.game.interimboard = copy_board()
             self.game.change_state(Putdown_State(self.colour, self.game))
         else:
             self.game.change_state(Error_State(self.colour, self.game, self))
@@ -114,7 +114,7 @@ class Putdown_State(Game_State):
     def finalise_move(self, to_square):
             self.game.chessboard.push(chess.Move(self.game.from_square, to_square))
             self.game.revert_lights()
-            self.game.interimboard = chessboard
+            self.game.interimboard = copy_board()
             self.game.from_square = -1
             self.game.change_state(Pickup_State(not self.colour, self.game))
         
