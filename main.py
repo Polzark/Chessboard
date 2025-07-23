@@ -18,18 +18,22 @@ chessboard = chess.Board()
 previous_board = copy_board()
 game = Game(chessboard)
 
-while not chessboard.is_game_over():
-    current_readings()
+try:
+    while not chessboard.is_game_over():
+        current_readings()
 
-    # Check for changes
-    changes = find_changes(incoming_board_data, previous_board)
-    if changes:
-        print(f"\nDetected {len(changes)} change(s):")
-        for change in changes:
-            print(f"  {change['square']}: piece {change['action']}")
-        game.calc(changes, chessboard)
-    
-    display_chessboard()
-    previous_board = copy_board()
-    
-    time.sleep(0.5)  # Slightly longer delay for chess moves
+        # Check for changes
+        changes = find_changes(incoming_board_data, previous_board)
+        if changes:
+            print(f"\nDetected {len(changes)} change(s):")
+            for change in changes:
+                print(f"  {change['square']}: piece {change['action']}")
+            game.calc(changes, chessboard)
+        
+        display_chessboard()
+        previous_board = copy_board()
+        
+        time.sleep(0.5)  # Slightly longer delay for chess moves
+
+except KeyboardInterrupt:
+    print("\nI'm dyinggg...")
