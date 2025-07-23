@@ -61,7 +61,7 @@ There are three different game_states:
 For best practices, you will have to install the packages in a virtual machine.
 To set it up, you can run these commands.
 
-```
+```bash
 $ cd ChessBoard/
 $ python3 -m venv .cheesevirtualenv --system-site-packages
 $ source .cheesevirtualenv/bin/activate
@@ -73,7 +73,7 @@ $ pip install numpy
 
 If you are on the Raspberry Pi 3 Model B V1.2, continue with:
 
-```
+```bash
 $ pip3 install --upgrade adafruit-python-shell
 $ wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
 $ sudo -E env "PATH=$VIRTUAL_ENV/bin:$PATH" python3 raspi-blinka.py
@@ -81,7 +81,7 @@ $ sudo -E env "PATH=$VIRTUAL_ENV/bin:$PATH" python3 raspi-blinka.py
 
 If you are setting up just for the packages (not on a Raspberry Pi):
 
-```
+```bash
 $ sudo apt-get install -y i2c-tools libgpiod-dev python3-libgpiod
 $ pip install --upgrade adafruit-blinka
 ```
@@ -91,20 +91,25 @@ This should create a `.cheesevirtualenv` folder that should resolve the module i
 
 To exit the virtual environment, you can use this command.
 
-```
+```bash
 $ deactivate
 ```
 
 Later on you can enter the virtual environment again by just running this command.
 
-```
+```bash
 $ source .cheesevirtualenv/bin/activate
+```
+
+## To run main.py as sudo:
+```bash
+sudo -E env "PATH=$VIRTUAL_ENV/bin:$PATH" python3 main.py
 ```
 
 ## Why is this required?
 This is to tackle the “Externally Managed Environment” error while using Pip3.
 
-```
+```bash
 error: externally-managed-environment
 
 × This environment is externally managed
