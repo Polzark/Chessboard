@@ -22,8 +22,8 @@ class Game:
         return self.legal_squares
     
     # just calls the state function
-    def calc(self, square, chessboard):
-        self.game_state.piece_change(square, chessboard)
+    def calc(self, square, incoming_board_data):
+        self.game_state.piece_change(square, incoming_board_data)
 
     # lights up all the given squares
     def lightup_squares(self, squares):
