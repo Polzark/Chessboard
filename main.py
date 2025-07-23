@@ -28,7 +28,7 @@ try:
             print(f"\nDetected {len(changes)} change(s):")
             for change in changes:
                 print(f"  {change['square']}: piece {change['action']}")
-            game.calc(changes, chessboard)
+            game.calc(changes, incoming_board_data)
         
         display_chessboard()
         previous_board = copy_board()
