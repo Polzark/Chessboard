@@ -2,6 +2,7 @@ import numpy as np
 from constants import * 
 import chess
 from cali_mux import *
+from cali_mux import chessboard as incoming_board_data
 from Game import *
 
 # Create start positions
@@ -21,7 +22,7 @@ while not chessboard.is_game_over():
     current_readings()
 
     # Check for changes
-    changes = find_changes(chessboard, previous_board)
+    changes = find_changes(incoming_board_data, previous_board)
     if changes:
         print(f"\nDetected {len(changes)} change(s):")
         for change in changes:
