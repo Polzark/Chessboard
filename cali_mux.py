@@ -50,7 +50,7 @@ signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
 chessboard = [[0 for _ in range(8)] for _ in range(8)]
 
 # Chess notation mapping
-files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 
 # Mapping from multiplexer channel to chess square
