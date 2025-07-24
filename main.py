@@ -34,7 +34,7 @@ try:
         display_chessboard()
         previous_board = copy_board()
         
-        time.sleep(0.5)  # Slightly longer delay for chess moves
+        time.sleep(1)  # Slightly longer delay for chess moves
 
 except KeyboardInterrupt:
     print("\nI'm dyinggg...")
