@@ -84,6 +84,7 @@ class Pickup_State(Game_State):
         else:
             self.game.change_state(Error_State(self.colour, self.game, self))
             self.game.error_lightup()
+            print(f"Panik_DOWN: {self.colour}")
         
 
 class Putdown_State(Game_State):
@@ -110,6 +111,7 @@ class Putdown_State(Game_State):
         else:
             self.game.change_state(Error_State(self.colour, self.game, self))
             self.game.error_lightup()
+            print(f"Panik_UP: {self.colour}")
     
     def finalise_move(self, to_square):
             self.game.chessboard.push(chess.Move(self.game.from_square, to_square))
