@@ -15,5 +15,5 @@ class PieceType(Enum):
     KING = 6
 
 class PieceColour(Enum):
-    WHITE = 0
-    BLACK = 1
+    WHITE = True
+    BLACK = False
