@@ -74,6 +74,8 @@ class Game_State:
 
 class Pickup_State(Game_State):
     def piece_change(self, changes, chessboard):
+        print(f"is colour same:{changes[0]['square']} ")
+        print(f"is piece removed: {changes[0]['action'] == 'removed'}")
         if self.same_colour(changes[0]['square']) and changes[0]['action'] == 'removed':
             squares = self.game.find_squares(chess.parse_square(changes[0]['square']))
             self.game.legal_squares = squares
