@@ -9,7 +9,7 @@ class Game:
         self.chessboard = chessboard    # updates after every legal move
         self.interimboard = copy_board()  # updates after pick up, put down
         self.game_state = Pickup_State(True, self) # White player first
-        self.pixels = neopixel.NeoPixel(board.D16, 8, auto_write=False) # D18 is physical/GPIO.BOARD pin 12
+        self.pixels = neopixel.NeoPixel(board.D16, 8, auto_write=False) # D16 is physical/GPIO.BOARD pin 23
         self.legal_squares = []
         self.from_square = -1
     
