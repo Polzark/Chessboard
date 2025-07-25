@@ -8,7 +8,7 @@ class Game:
     def __init__(self, chessboard):
         self.chessboard = chessboard    # updates after every legal move
         self.interimboard = copy_board()  # updates after pick up, put down
-        self.game_state = Pickup_State(PieceColour.WHITE, self) # White player first
+        self.game_state = Pickup_State(True, self) # White player first
         self.pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False) # D18 is physical/GPIO.BOARD pin 12
         self.legal_squares = []
         self.from_square = -1
@@ -74,7 +74,7 @@ class Game_State:
 
 class Pickup_State(Game_State):
     def piece_change(self, changes, chessboard):
-        print(f"is colour same:{self.same_colour(changes[0]['square']) } ")
+        print(f"is colour same:{self.game.chessboard.color_at(chess.parse_square(changes[0]['square'])) == self.colour } ")
         print(f"is piece removed: {changes[0]['action'] == 'removed'}")
         if self.game.chessboard.color_at(chess.parse_square(changes[0]['square'])) == self.colour and changes[0]['action'] == 'removed':
             squares = self.game.find_squares(chess.parse_square(changes[0]['square']))
