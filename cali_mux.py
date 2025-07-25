@@ -43,6 +43,7 @@ s2 = [0,0,0,0,1,1,1,1] # s2 values
 
 # 1D array for raw sensor readings (original format)
 signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
+chess_init = [[1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1]]
 
 # 2D array for chessboard representation (8x8 board)
 # board[row][col] where row 0 = rank 8, row 7 = rank 1

@@ -16,7 +16,10 @@ print(Start)
 
 # Start game
 chess_board = chess.Board()
-previous_board = copy_board()
+
+chess_init = [[0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]]
+
+previous_board = chess_init
 game = Game(chess_board)
 
 try:
