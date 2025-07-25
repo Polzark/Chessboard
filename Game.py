@@ -82,6 +82,7 @@ class Pickup_State(Game_State):
             self.game.legal_squares = squares
             self.game.from_square = chess.parse_square(changes[0]['square'])
             self.game.lightup_squares(squares)
+            print(f"light up: {squares}")
             self.game.interimboard = copy_board()
             self.game.change_state(Putdown_State(self.colour, self.game))
         else:
