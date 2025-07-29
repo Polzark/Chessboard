@@ -32,13 +32,15 @@ class Game:
             ahh = chess.parse_square(square)
             row = chess.square_file(ahh)
             col = chess.square_rank(ahh)
-            print("ahh: " + ahh)
-            print("square: " + square)
-            print("row: " + row)
-            print("col" + col)
+            # print("ahh: " + ahh)
+            print(f"ahh: {ahh}")
+
+            print(f"square: {square}")
+            print(f"row: {row}")
+            print(f"col {col}")
             if (col == 0):
                 self.pixels[row].fill(255,0,0)
-        print("self.pixels: " + self.pixels)
+        print(f"self.pixels: {self.pixels}")
         self.pixels.show()
     
     # Lights up all lights with the colour red (chatgpt said that double brackets work
