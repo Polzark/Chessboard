@@ -34,7 +34,7 @@ class Game:
             col = chess.square_rank(ahh)
             print(square)
             if (col == 0):
-                self.pixels[row].fill((255,0,0))
+                self.pixels[row].fill(255,0,0)
         print(self.pixels)
         self.pixels.show()
     
