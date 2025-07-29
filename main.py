@@ -1,3 +1,5 @@
+#!/user/bin/env python3
+
 import numpy as np
 from constants import * 
 import chess
@@ -41,4 +43,7 @@ try:
 
 except KeyboardInterrupt:
     print("\nI'm dyinggg...")
+    pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False)
+    pixels.fill((0,0,0))
+    pixels.show()
     GPIO.cleanup()
