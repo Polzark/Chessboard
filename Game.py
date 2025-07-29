@@ -32,7 +32,9 @@ class Game:
             ahh = chess.parse_square(square)
             row = chess.square_file(ahh)
             col = chess.square_rank(ahh)
-            self.pixels[ahh] = (255,0,0)
+            print(square)
+            if (col == 0):
+                self.pixels[row].fill((255,0,0))
         print(self.pixels)
         self.pixels.show()
     
