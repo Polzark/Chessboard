@@ -39,14 +39,14 @@ class Game:
             print(f"row: {row}")
             print(f"col {col}")
             if (row == 0):
-                self.pixels[col] = (255,0,0)
+                self.pixels[col] = (0, 255, 0)
         print(f"self.pixels: {self.pixels}")
         self.pixels.show()
     
     # Lights up all lights with the colour red (chatgpt said that double brackets work
     # i believe in it)
     def error_lightup(self):
-        self.pixels.fill((0, 255, 0))
+        self.pixels.fill((255, 0, 0))
         self.pixels.show()
     
     # turn all lights off
