@@ -38,7 +38,7 @@ class Game:
             print(f"square: {square}")
             print(f"row: {row}")
             print(f"col {col}")
-            if (col == 0):
+            if (row == 0):
                 self.pixels[col].fill(255,0,0)
         print(f"self.pixels: {self.pixels}")
         self.pixels.show()
