@@ -34,6 +34,7 @@ class Game:
             col = chess.square_rank(ahh)
             if (col == 0):
                 self.pixels[row] = (255,0,0)
+        print(self.pixels)
         self.pixels.show()
     
     # Lights up all lights with the colour red (chatgpt said that double brackets work
