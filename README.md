@@ -65,25 +65,12 @@ To set it up, you can run these commands.
 $ cd ChessBoard/
 $ python3 -m venv .cheesevirtualenv --system-site-packages
 $ source .cheesevirtualenv/bin/activate
-$ pip install chess
-$ pip install RPi.GPIO
-$ pip3 install rpi_ws281x adafruit-circuitpython-neopixel
-$ pip install numpy
-```
-
-If you are on the Raspberry Pi 3 Model B V1.2, continue with:
-
-```bash
-$ pip3 install --upgrade adafruit-python-shell
-$ wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
-$ sudo -E env "PATH=$VIRTUAL_ENV/bin:$PATH" python3 raspi-blinka.py
-```
-
-If you are setting up just for the packages (not on a Raspberry Pi):
-
-```bash
-$ sudo apt-get install -y i2c-tools libgpiod-dev python3-libgpiod
-$ pip install --upgrade adafruit-blinka
+pip install chess
+pip install RPi.GPIO
+pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+pip install numpy
+sudo apt-get install -y i2c-tools libgpiod-dev python3-libgpiod
+pip install --upgrade adafruit-blinka
 ```
 
 This should create a `.cheesevirtualenv` folder that should resolve the module import issues.
