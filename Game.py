@@ -61,7 +61,7 @@ class Game:
 
     def is_legal_square(self, square):
         for sq in self.legal_squares:
-            if (chess.parse_square(square) == sq):
+            if (square == sq):
                 return True
         return False
 
@@ -86,7 +86,6 @@ class Pickup_State(Game_State):
         print(f"is piece removed: {changes[0]['action'] == 'removed'}")
         if self.game.chessboard.color_at(chess.parse_square(changes[0]['square'])) == self.colour and changes[0]['action'] == 'removed':
             squares = self.game.find_squares(chess.parse_square(changes[0]['square']))
-            self.game.legal_squares = squares
             self.game.from_square = chess.parse_square(changes[0]['square'])
             self.game.lightup_squares(squares)
             print(f"light up: {squares}")
