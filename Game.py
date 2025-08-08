@@ -138,10 +138,11 @@ class Error_State(Game_State):
     def __init__(self, colour, game, prev_state):
         super().__init__(colour, game)
         self.prev_state = prev_state
+        
 
     def piece_change(self, changes, chessboard):
-        same = find_changes(self.game.interimboard, chessboard)
-        if not same:
+        diff = find_changes(self.game.interimboard, chessboard)
+        if diff:
             self.game.error_lightup()
         else:
             self.game.revert_lights()
