@@ -25,6 +25,23 @@ class Game:
     def calc(self, square, incoming_board_data):
         self.game_state.piece_change(square, incoming_board_data)
 
+    def show_legal_squares(self):
+        for square in self.legal_squares:
+            ## convert to row and col index
+            ahh = chess.parse_square(square)
+            row = chess.square_file(ahh)
+            col = chess.square_rank(ahh)
+            # print("ahh: " + ahh)
+            print(f"ahh: {ahh}")
+
+            print(f"square: {square}")
+            print(f"row: {row}")
+            print(f"col {col}")
+            if (row == 0):
+                self.pixels[col] = (0, 255, 0)
+        print(f"self.pixels: {self.pixels}")
+        self.pixels.show()
+
     # lights up all the given squares
     def lightup_squares(self, squares):
         for square in squares:
@@ -146,4 +163,5 @@ class Error_State(Game_State):
             self.game.error_lightup()
         else:
             self.game.revert_lights()
+            self.game.show_legal_squares(self)
             self.game.game_state = self.prev_state
