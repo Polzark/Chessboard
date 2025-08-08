@@ -163,5 +163,5 @@ class Error_State(Game_State):
             self.game.error_lightup()
         else:
             self.game.revert_lights()
-            self.game.show_legal_squares(self)
+            self.game.show_legal_squares()
             self.game.game_state = self.prev_state
