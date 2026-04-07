@@ -61,17 +61,10 @@ There are three different game_states:
 For best practices, you will have to install the packages in a virtual machine.
 To set it up, you can run these commands.
 
-```bash
-$ cd ChessBoard/
-$ python3 -m venv .cheesevirtualenv --system-site-packages
-$ source .cheesevirtualenv/bin/activate
-pip install chess
-pip install RPi.GPIO
-pip3 install rpi_ws281x adafruit-circuitpython-neopixel
-pip install numpy
-sudo apt-get install -y i2c-tools libgpiod-dev python3-libgpiod
-pip install --upgrade adafruit-blinka
-```
+full setup: `make setup`
+virtual environment setup: `make venv`
+package installation and updates `make install`
+
 
 This should create a `.cheesevirtualenv` folder that should resolve the module import issues.
 <br>

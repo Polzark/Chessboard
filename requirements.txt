@@ -1,0 +1,6 @@
+chess
+RPi.GPIO
+rpi_ws281x
+adafruit-circuitpython-neopixel
+numpy
+adafruit-blinka
