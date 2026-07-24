@@ -30,7 +30,7 @@ GPIO.setwarnings(False)
 # Comments are for GPIO.BOARD
 S0_PIN = 17 # 11
 S1_PIN = 27 # 13
-S2_PIN = 22 # 15
+S2_PIN = 23 # 16
 SIG_PIN = 24 # 18
 GPIO.setup(S0_PIN, GPIO.OUT) # s0
 GPIO.setup(S1_PIN, GPIO.OUT) # s1
