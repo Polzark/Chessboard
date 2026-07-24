@@ -47,7 +47,7 @@ def current_readings():
     for i in range(8):
         GPIO.output(11,s0[i]) # s0_pin
         GPIO.output(13,s1[i]) # s1_pin
-        GPIO.output(15,s2[i]) # s2_pin
+        GPIO.output(16,s2[i]) # s2_pin
 
         signal = GPIO.input(18)
         if signal:
