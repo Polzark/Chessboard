@@ -20,9 +20,9 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(11, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN) # s0
-GPIO.setup(13, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN) # s1
-GPIO.setup(16, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN) # s2
+GPIO.setup(11, GPIO.OUT) # s0
+GPIO.setup(13, GPIO.OUT) # s1
+GPIO.setup(16, GPIO.OUT) # s2
 GPIO.setup(18, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
 
 s0 = [0,1,0,1,0,1,0,1] # s0 values
