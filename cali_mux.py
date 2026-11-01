@@ -22,27 +22,22 @@ import chess
 ###################### --- Initial Setup Stuff --- ############################
 ###############################################################################
 
-if GPIO.getmode() is None:
-    GPIO.setmode(GPIO.BCM)
-
+# Comments are for GPIO.BOARD
+LOAD_PIN = 17    # SH/LD
+CLOCK_PIN = 27   # CLK
+DATA_PIN = 24    # QH
+GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-# Comments are for GPIO.BOARD
-S0_PIN = 17 # 11
-S1_PIN = 27 # 13
-S2_PIN = 23 # 16
-SIG_PIN = 24 # 18
-GPIO.setup(S0_PIN, GPIO.OUT) # s0
-GPIO.setup(S1_PIN, GPIO.OUT) # s1
-GPIO.setup(S2_PIN, GPIO.OUT) # s2
-GPIO.setup(SIG_PIN, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  #Signal Input
+GPIO.setup(LOAD_PIN, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(CLOCK_PIN, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(DATA_PIN, GPIO.IN)
 
-s0 = [0,1,0,1,0,1,0,1] # s0 values
-s1 = [0,0,1,1,0,0,1,1] # s1 values
-s2 = [0,0,0,0,1,1,1,1] # s2 values
+# Sensor configuration
+PIECE_DETECTED_STATE = GPIO.LOW
 
 # 1D array for raw sensor readings (original format)
-signal_reading = [0,0,0,0,0,0,0,0] # Initialise signal_reading
+signal_reading = [0] * 8
 chess_init = [[1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1]]
 
 # 2D array for chessboard representation (8x8 board)
@@ -64,18 +59,43 @@ ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 #         return files[col] + ranks[row]
 #     return "Invalid"
 
-def square_to_coords(square):
-    """Convert chess square notation (e.g., 'A1') to board coordinates"""
-    if len(square) != 2:
-        return None, None
-    file_char = square[0].upper()
-    rank_char = square[1]
+
+def read_shift_register():
+    """Read all 8 inputs from the SN74HC165."""
+
+    # Assuming input is:
+    # A B C D
+    # H G F E
+
+    bits = []
+
+    # Load all parallel inputs
+    GPIO.output(LOAD_PIN, GPIO.LOW)
+    time.sleep(0.00001)
+    GPIO.output(LOAD_PIN, GPIO.HIGH)
+
+    for i in range(8):
+        bits.append(GPIO.input(DATA_PIN))
+
+        # Shift to the next bit
+        GPIO.output(CLOCK_PIN, GPIO.HIGH)
+        GPIO.output(CLOCK_PIN, GPIO.LOW)
+
+    return bits
+
+
+# def square_to_coords(square):
+#     """Convert chess square notation (e.g., 'A1') to board coordinates"""
+#     if len(square) != 2:
+#         return None, None
+#     file_char = square[0].upper()
+#     rank_char = square[1]
     
-    if file_char in files and rank_char in ranks:
-        col = files.index(file_char)
-        row = ranks.index(rank_char)
-        return row, col
-    return None, None
+#     if file_char in files and rank_char in ranks:
+#         col = files.index(file_char)
+#         row = ranks.index(rank_char)
+#         return row, col
+#     return None, None
 
 ###############################################################################
 ###############################################################################
@@ -84,35 +104,30 @@ def square_to_coords(square):
 
 def current_readings():
     """Read all multiplexer channels and update both 1D and 2D arrays"""
+    global signal_reading, chessboard
+
+    signal_reading = read_shift_register()
+
     timestamp = time.time()
     stamp = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+
     print()
     print("Chessboard readings at " + stamp + " : ")
     print("=" * 50)
-    
+
+    chessboard = [
+        [1 if reading == PIECE_DETECTED_STATE else 0 for reading in signal_reading[0:4]],
+        [1 if reading == PIECE_DETECTED_STATE else 0 for reading in signal_reading[4:8]]
+    ]
+            
     # Read all 8 channels
     for i in range(8):
-        GPIO.output(S0_PIN, s0[i]) # s0_pin
-        GPIO.output(S1_PIN, s1[i]) # s1_pin
-        GPIO.output(S2_PIN, s2[i]) # s2_pin
-        time.sleep(0.001)  # Small delay for signal stability
-        
-        signal = GPIO.input(SIG_PIN)
-        signal_reading[i] = 1 if signal else 0
-        
-        # Update 2D chessboard array
-        # Note: This assumes first 8 channels map to first col
-        # You'll need to adjust mapping based on your physical setup
+        position = i + 1
+        reading = signal_reading[i]
 
-        # Made a change so its reading first column - Steph
-        if i < 8:
-            row = i
-            col = 0
-            chessboard[row][col] = signal_reading[i]
+        status = "HIGH" if reading else "LOW"
         
-        # Display with chess notation
-        square = files[col] + ranks[row]
-        print(f"Channel {i:2d} [{square}] = "f"{s0[i]}{s1[i]}{s2[i]}  Reading: {signal_reading[i]}")
+        print(f"Position {position}: {status} ({reading})")
     
     print("-" * 50)
 
@@ -122,34 +137,34 @@ def display_chessboard():
     print("  " + " ".join(files))
     print("  " + "-" * 15)
     
-    for row in range(8):
+    for row in range(2):
         row_display = ranks[row] + "|"
-        for col in range(8):
+        for col in range(4):
             piece = "●" if chessboard[row][col] else "○"
             row_display += piece + " "
         print(row_display)
     print()
 
-def get_square_state(square):
-    """Get the state of a specific chess square"""
-    row, col = square_to_coords(square)
-    if row is not None and col is not None:
-        return chessboard[row][col]
-    return None
+# def get_square_state(square):
+#     """Get the state of a specific chess square"""
+#     row, col = square_to_coords(square)
+#     if row is not None and col is not None:
+#         return chessboard[row][col]
+#     return None
 
-def set_square_state(square, state):
-    """Set the state of a specific chess square"""
-    row, col = square_to_coords(square)
-    if row is not None and col is not None:
-        chessboard[row][col] = state
-        return True
-    return False
+# def set_square_state(square, state):
+#     """Set the state of a specific chess square"""
+#     row, col = square_to_coords(square)
+#     if row is not None and col is not None:
+#         chessboard[row][col] = state
+#         return True
+#     return False
 
 def find_changes(current_board, previous_board):
     """Find changes between current board and previous board state"""
     changes = []
-    for row in range(8):
-        for col in range(8):
+    for row in range(2):
+        for col in range(4):
             if current_board[row][col] != previous_board[row][col]:
                 square = files[col] + ranks[row]
                 old_state = previous_board[row][col]
@@ -172,7 +187,22 @@ def copy_board():
 ############################ --- The Magic --- ################################
 ###############################################################################
 
+def wait_for_start():
+    print("Waiting for a magnet at position H...")
+
+    while True:
+        readings = read_shift_register()
+
+        if readings[0] == PIECE_DETECTED_STATE:
+            print("Magnet detected at H. Starting...")
+            return
+
+        time.sleep(0.1)
+
 def main():
+    wait_for_start()
+
+    current_readings()
     previous_board = copy_board()
     board = chess.Board()
     
