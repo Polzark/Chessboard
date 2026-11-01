@@ -21,7 +21,7 @@ import time
 import board
 import neopixel
 
-LED_COUNT = 24
+LED_COUNT = 4
 
 pixels = neopixel.NeoPixel(
     board.D18,
