@@ -3,7 +3,7 @@ import board
 import time
 
 try:
-    pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False)
+    pixels = neopixel.NeoPixel(board.D18, 1, auto_write=False)
     pixels.fill((255,0,0))
     pixels.show()
     print("Sleeping for 3s now board should be red hopefully\n")
