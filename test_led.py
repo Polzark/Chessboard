@@ -24,7 +24,7 @@ import neopixel
 LED_COUNT = 4
 
 pixels = neopixel.NeoPixel(
-    board.D18,
+    board.D12,
     LED_COUNT,
     auto_write=False
 )
