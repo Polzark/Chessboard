@@ -57,9 +57,9 @@ try:
 
         # Map each physical sensor position to its LED
         for i in range(16):
-            sensor_reading = (i + 8) % 16
+            sensor_index = (i + 8) % 16
 
-            if readings[i] == PIECE_DETECTED_STATE:
+            if readings[sensor_index] == PIECE_DETECTED_STATE:
                 pixels[i] = (255, 0, 0)
             else:
                 pixels[i] = (0, 0, 0)
