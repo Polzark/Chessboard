@@ -49,6 +49,7 @@ try:
 
     while True:
         readings = read_shift_register()
+        print(readings)
 
         # First register is read after the second register.
         # Therefore, readings[0:8] = sensors 9-16
@@ -64,7 +65,7 @@ try:
                 pixels[i] = (0, 0, 0)
 
         pixels.show()
-        time.sleep(0.05)
+        time.sleep(0.5)
 
 except KeyboardInterrupt:
     print("\nStopping...")
