@@ -43,6 +43,12 @@ def read_shift_register():
 
     return bits
 
+led_mapping = [
+    0, 1, 2, 3,       # Sensors 1-4
+    7, 6, 5, 4,       # Sensors 5-8
+    8, 9, 10, 11,     # Sensors 9-12
+    15, 14, 13, 12    # Sensors 13-16
+]
 
 try:
     print("Reading Hall sensors... Press Ctrl+C to stop.")
@@ -58,11 +64,12 @@ try:
         # Map each physical sensor position to its LED
         for i in range(16):
             sensor_index = (i + 8) % 16
+            led_index = led_mapping[sensor_index - 1]
 
             if readings[sensor_index] == PIECE_DETECTED_STATE:
-                pixels[i] = (255, 0, 0)
+                pixels[led_index] = (255, 0, 0)
             else:
-                pixels[i] = (0, 0, 0)
+                pixels[led_index] = (0, 0, 0)
 
         pixels.show()
         time.sleep(0.5)
