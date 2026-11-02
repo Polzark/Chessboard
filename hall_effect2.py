@@ -55,21 +55,20 @@ try:
 
     while True:
         readings = read_shift_register()
-        print(readings)
 
         # First register is read after the second register.
         # Therefore, readings[0:8] = sensors 9-16
         # and readings[8:16] = sensors 1-8.
 
         # Map each physical sensor position to its LED
-        for i, reading in enumerate(readings):
-            sensor_number = 16 - i if i < 8 else 8 - (i - 8)
-            led_index = led_mapping[sensor_number - 1]
+        for i in range(16):
+            sensor_index = (i + 8) % 16
+            led_index = led_mapping[i]
 
-            if reading == PIECE_DETECTED_STATE:
-                pixels[led_index] = (255, 0, 0)
+            if readings[sensor_index] == PIECE_DETECTED_STATE:
+                pixels[i] = (255, 0, 0)
             else:
-                pixels[led_index] = (0, 0, 0)
+                pixels[i] = (0, 0, 0)
 
         pixels.show()
         time.sleep(0.5)
