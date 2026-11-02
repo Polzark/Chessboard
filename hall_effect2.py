@@ -59,7 +59,7 @@ try:
         for i in range(16):
             sensor_reading = (i + 8) % 16
 
-            if sensor_reading == PIECE_DETECTED_STATE:
+            if readings[i] == PIECE_DETECTED_STATE:
                 pixels[i] = (255, 0, 0)
             else:
                 pixels[i] = (0, 0, 0)
