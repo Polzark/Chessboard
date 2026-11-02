@@ -66,11 +66,12 @@ try:
             led_index = led_mapping[i]
 
             if readings[sensor_index] == PIECE_DETECTED_STATE:
-                pixels[i] = (255, 0, 0)
+                pixels[led_index] = (255, 0, 0)
             else:
-                pixels[i] = (0, 0, 0)
+                pixels[led_index] = (0, 0, 0)
 
         pixels.show()
+        print(readings)
         time.sleep(0.5)
 
 except KeyboardInterrupt:
