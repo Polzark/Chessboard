@@ -26,6 +26,18 @@ chess_board = chess.Board(None)
 # Place a white rook at a8
 chess_board.set_piece_at(chess.A8, chess.Piece(chess.ROOK, chess.WHITE))
 
+print("Waiting for a magnet at a8...")
+
+while True:
+    current_readings()
+
+    if incoming_board_data[0][0] == 1:
+        print("Magnet detected at a8! Starting game.")
+        break
+
+    time.sleep(0.5)
+
+
 # previous_board = chess_init
 previous_board = copy_board()
 game = Game(chess_board)
