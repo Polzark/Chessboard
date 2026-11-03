@@ -49,8 +49,8 @@ ROWS = len(SENSOR_LAYOUT)
 COLS = len(SENSOR_LAYOUT[0])
 SENSOR_COUNT = ROWS * COLS
 
-files = ['a', 'b', 'c', 'd']
-ranks = ['4', '3', '2', '1']
+files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 
 # Logical board state: 1 = magnet detected, 0 = empty
 chessboard = [[0 for _ in range(COLS)] for _ in range(ROWS)]
@@ -171,6 +171,7 @@ def find_changes(current_board, previous_board):
                 square = files[col] + ranks[row]
                 old_state = previous_board[row][col]
                 new_state = current_board[row][col]
+
                 changes.append({
                     'square': square,
                     'from': old_state,
@@ -190,13 +191,13 @@ def copy_board():
 ###############################################################################
 
 def wait_for_start():
-    print("Waiting for a magnet at position H...")
+    print("Waiting for a magnet at position a8...")
 
     while True:
         readings = read_shift_register()
 
-        if readings[0] == PIECE_DETECTED_STATE:
-            print("Magnet detected at H. Starting...")
+        if readings[SENSOR_LAYOUT[0][0]] == PIECE_DETECTED_STATE:
+            print("Magnet detected at a8. Starting...")
             return
 
         time.sleep(0.1)
