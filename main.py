@@ -24,7 +24,8 @@ print(Start)
 chess_board = chess.Board(None)
 
 # Place a white rook at a8
-chess_board.set_piece_at(chess.A8, chess.Piece(chess.ROOK, chess.WHITE))
+chess_board.set_piece_at(chess.B8, chess.Piece(chess.PAWN, chess.WHITE))
+chess_board.set_piece_at(chess.A7, chess.Piece(chess.ROOK, chess.WHITE))
 chess_board.set_piece_at(chess.D5, chess.Piece(chess.QUEEN, chess.BLACK))
 
 print("Waiting for a magnet at a8...")
