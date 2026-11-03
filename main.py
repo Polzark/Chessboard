@@ -25,13 +25,14 @@ chess_board = chess.Board(None)
 
 # Place a white rook at a8
 chess_board.set_piece_at(chess.A8, chess.Piece(chess.ROOK, chess.WHITE))
+chess_board.set_piece_at(chess.A8, chess.Piece(chess.QUEEN, chess.BLACK))
 
 print("Waiting for a magnet at a8...")
 
 while True:
     current_readings()
 
-    if incoming_board_data[0][0] == 1:
+    if incoming_board_data[0][0] == 1 and incoming_board_data[3][3] == 1:
         print("Magnet detected at a8! Starting game.")
         break
 
