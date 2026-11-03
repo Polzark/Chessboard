@@ -17,11 +17,17 @@ print(Start)
 
 
 # Start game
-chess_board = chess.Board()
+# chess_board = chess.Board()
 
-chess_init = [[0,0,0,0,0,0,0,0], [1,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]]
+# chess_init = [[0,0,0,0,0,0,0,0], [1,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]]
 
-previous_board = chess_init
+chess_board = chess.Board(None)
+
+# Place a white rook at a8
+chess_board.set_piece_at(chess.A8, chess.Piece(chess.ROOK, chess.WHITE))
+
+# previous_board = chess_init
+previous_board = copy_board()
 game = Game(chess_board)
 
 try:

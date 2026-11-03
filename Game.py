@@ -4,15 +4,36 @@ import board
 import neopixel
 from cali_mux import find_changes, copy_board
 
+LED_LAYOUT = [
+    [0, 1, 2, 3],
+    [7, 6, 5, 4],
+    [8, 9, 10, 11],
+    [15, 14, 13, 12]
+]
+
+ROWS = len(LED_LAYOUT)
+COLS = len(LED_LAYOUT[0])
+LED_COUNT = ROWS * COLS
+
+
 class Game:
     def __init__(self, chessboard):
         self.chessboard = chessboard    # updates after every legal move
         self.interimboard = copy_board()  # updates after pick up, put down
         self.game_state = Pickup_State(True, self) # White player first
-        self.pixels = neopixel.NeoPixel(board.D18, 8, auto_write=False) # D16 is physical/GPIO.BOARD pin 23
+        self.pixels = neopixel.NeoPixel(board.D18, LED_COUNT, auto_write=False)
         self.legal_squares = []
         self.from_square = -1
     
+    def get_led_index(self, square):
+        row = 7 - chess.square_rank(square)
+        col = chess.square_file(square)
+
+        if 0 <= row < ROWS and 0 <= col < COLS:
+            return LED_LAYOUT[row][col]
+
+        return None
+
     # find all legal moves from a given square
     def find_squares(self, square):
         self.legal_squares = []
@@ -25,38 +46,62 @@ class Game:
     def calc(self, square, incoming_board_data):
         self.game_state.piece_change(square, incoming_board_data)
 
-    def show_legal_squares(self):
-        for square in self.legal_squares:
-            ## convert to row and col index
-            ahh = chess.parse_square(square)
-            row = chess.square_file(ahh)
-            col = chess.square_rank(ahh)
-            # print("ahh: " + ahh)
-            print(f"ahh: {ahh}")
+    # def show_legal_squares(self):
+    #     for square in self.legal_squares:
+    #         ## convert to row and col index
+    #         ahh = chess.parse_square(square)
+    #         row = chess.square_file(ahh)
+    #         col = chess.square_rank(ahh)
+    #         # print("ahh: " + ahh)
+    #         print(f"ahh: {ahh}")
 
-            print(f"square: {square}")
-            print(f"row: {row}")
-            print(f"col {col}")
-            if (row == 0):
-                self.pixels[col] = (0, 255, 0)
+    #         print(f"square: {square}")
+    #         print(f"row: {row}")
+    #         print(f"col {col}")
+    #         if (row == 0):
+    #             self.pixels[col] = (0, 255, 0)
+    #     print(f"self.pixels: {self.pixels}")
+    #     self.pixels.show()
+
+    def show_legal_squares(self):
+        self.pixels.fill((0, 0, 0))
+        
+        for square in self.legal_squares:
+            square_index = chess.parse_square(square)
+            led_index = self.get_led_index(square_index)
+
+            if led_index is not None:
+                self.pixels[led_index] = (0, 255, 0)
+
         print(f"self.pixels: {self.pixels}")
         self.pixels.show()
 
     # lights up all the given squares
+    # def lightup_squares(self, squares):
+    #     for square in squares:
+    #         ## convert to row and col index
+    #         ahh = chess.parse_square(square)
+    #         row = chess.square_file(ahh)
+    #         col = chess.square_rank(ahh)
+    #         # print("ahh: " + ahh)
+    #         print(f"ahh: {ahh}")
+
+    #         print(f"square: {square}")
+    #         print(f"row: {row}")
+    #         print(f"col {col}")
+    #         if (row == 0):
+    #             self.pixels[col] = (0, 255, 0)
+    #     print(f"self.pixels: {self.pixels}")
+    #     self.pixels.show()
+
     def lightup_squares(self, squares):
         for square in squares:
-            ## convert to row and col index
-            ahh = chess.parse_square(square)
-            row = chess.square_file(ahh)
-            col = chess.square_rank(ahh)
-            # print("ahh: " + ahh)
-            print(f"ahh: {ahh}")
+            square_index = chess.parse_square(square)
+            led_index = self.get_led_index(square_index)
 
-            print(f"square: {square}")
-            print(f"row: {row}")
-            print(f"col {col}")
-            if (row == 0):
-                self.pixels[col] = (0, 255, 0)
+            if led_index is not None:
+                self.pixels[led_index] = (0, 255, 0)
+
         print(f"self.pixels: {self.pixels}")
         self.pixels.show()
     
