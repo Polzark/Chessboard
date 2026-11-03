@@ -33,7 +33,7 @@ print("Waiting for a magnet at a8...")
 while True:
     current_readings()
 
-    if incoming_board_data[0][0] == 1 and incoming_board_data[3][3] == 1:
+    if incoming_board_data[0][1] == 1 and incoming_board_data[1][0] == 1 and incoming_board_data[3][3] == 1:
         print("Magnet detected at a8! Starting game.")
         break
 
