@@ -43,7 +43,8 @@ previous_board = copy_board()
 game = Game(chess_board)
 
 try:
-    while not chess_board.is_game_over():
+    # while not chess_board.is_game_over():
+    while True:
         current_readings()
 
         # Check for changes
