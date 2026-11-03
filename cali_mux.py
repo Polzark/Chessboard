@@ -22,67 +22,38 @@ import chess
 ###################### --- Initial Setup Stuff --- ############################
 ###############################################################################
 
-# Comments are for GPIO.BOARD
-LOAD_PIN = 17    # SH/LD
-CLOCK_PIN = 27   # CLK
-DATA_PIN = 24    # QH
-GPIO.setmode(GPIO.BCM)
+
+LOAD_PIN = 17
+CLOCK_PIN = 27
+DATA_PIN = 24
+
+PIECE_DETECTED_STATE = GPIO.LOW
+
+if GPIO.getmode() is None:
+    GPIO.setmode(GPIO.BCM)
+
 GPIO.setwarnings(False)
 
 GPIO.setup(LOAD_PIN, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(CLOCK_PIN, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(DATA_PIN, GPIO.IN)
 
-# Sensor configuration
-PIECE_DETECTED_STATE = GPIO.LOW
+SENSOR_LAYOUT = [
+    [8, 9, 10, 11],
+    [12, 13, 14, 15],
+    [0, 1, 2, 3],
+    [4, 5, 6, 7]
+]
 
-# 1D array for raw sensor readings (original format)
-signal_reading = [0] * 8
-chess_init = [[1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0] , [1,1,1,1,1,1,1,1], [1,1,1,1,1,1,1,1]]
+ROWS = len(SENSOR_LAYOUT)
+COLS = len(SENSOR_LAYOUT[0])
+SENSOR_COUNT = ROWS * COLS
 
-# 2D array for chessboard representation (8x8 board)
-# board[row][col] where row 0 = rank 8, row 7 = rank 1
-# col 0 = file A, col 7 = file H
-chessboard = [[0 for _ in range(8)] for _ in range(8)]
+files = ['a', 'b', 'c', 'd']
+ranks = ['4', '3', '2', '1']
 
-# Chess notation mapping
-files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
-
-# Mapping from multiplexer channel to chess square
-# You may need to adjust this based on your physical board wiring
-# def channel_to_square(channel):
-#     """Convert multiplexer channel (0-7) to chess square notation"""
-#     if channel < 8:
-#         row = channel // 8
-#         col = channel % 8
-#         return files[col] + ranks[row]
-#     return "Invalid"
-
-
-def read_shift_register():
-    """Read all 8 inputs from the SN74HC165."""
-
-    # Assuming input is:
-    # A B C D
-    # H G F E
-
-    bits = []
-
-    # Load all parallel inputs
-    GPIO.output(LOAD_PIN, GPIO.LOW)
-    time.sleep(0.00001)
-    GPIO.output(LOAD_PIN, GPIO.HIGH)
-
-    for i in range(8):
-        bits.append(GPIO.input(DATA_PIN))
-
-        # Shift to the next bit
-        GPIO.output(CLOCK_PIN, GPIO.HIGH)
-        GPIO.output(CLOCK_PIN, GPIO.LOW)
-
-    return bits
-
+# Logical board state: 1 = magnet detected, 0 = empty
+chessboard = [[0 for _ in range(COLS)] for _ in range(ROWS)]
 
 # def square_to_coords(square):
 #     """Convert chess square notation (e.g., 'A1') to board coordinates"""
@@ -102,11 +73,42 @@ def read_shift_register():
 ###################### --- All helper functions --- ###########################
 ###############################################################################
 
-def current_readings():
-    """Read all multiplexer channels and update both 1D and 2D arrays"""
-    global signal_reading, chessboard
 
-    signal_reading = read_shift_register()
+def read_shift_register():
+    """Read all 16 sensor signals from the two daisy-chained HC165s."""
+    bits = []
+
+    # Capture parallel sensor states
+    GPIO.output(LOAD_PIN, GPIO.LOW)
+    time.sleep(0.00001)
+    GPIO.output(LOAD_PIN, GPIO.HIGH)
+
+    # Read serial output
+    for _ in range(SENSOR_COUNT):
+        bits.append(GPIO.input(DATA_PIN))
+
+        GPIO.output(CLOCK_PIN, GPIO.HIGH)
+        GPIO.output(CLOCK_PIN, GPIO.LOW)
+
+    return bits
+
+
+def current_readings():
+    readings = read_shift_register()
+
+    for row in range(ROWS):
+        for col in range(COLS):
+            sensor_index = SENSOR_LAYOUT[row][col]
+            occupied = readings[sensor_index] == PIECE_DETECTED_STATE
+
+            chessboard[row][col] = occupied
+
+    return readings
+
+def current_readings_and_print():
+    global chessboard
+
+    readings = read_shift_register()
 
     timestamp = time.time()
     stamp = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
@@ -115,21 +117,21 @@ def current_readings():
     print("Chessboard readings at " + stamp + " : ")
     print("=" * 50)
 
-    chessboard = [
-        [1 if reading == PIECE_DETECTED_STATE else 0 for reading in signal_reading[0:4]],
-        [1 if reading == PIECE_DETECTED_STATE else 0 for reading in signal_reading[4:8]]
-    ]
-            
-    # Read all 8 channels
-    for i in range(8):
-        position = i + 1
-        reading = signal_reading[i]
+    for row in range(ROWS):
+        for col in range(COLS):
+            sensor_index = SENSOR_LAYOUT[row][col]
 
-        status = "HIGH" if reading else "LOW"
-        
-        print(f"Position {position}: {status} ({reading})")
-    
+            occupied = readings[sensor_index] == PIECE_DETECTED_STATE
+            chessboard[row][col] = 1 if occupied else 0
+
+            status = "LOW" if occupied else "HIGH"
+            
+            print(f"Position ({row}, {col}): {status} ({readings[sensor_index]})")
+
     print("-" * 50)
+
+    return readings
+
 
 def display_chessboard():
     """Display the chessboard in a visual 8x8 grid"""
@@ -137,9 +139,9 @@ def display_chessboard():
     print("  " + " ".join(files))
     print("  " + "-" * 15)
     
-    for row in range(2):
+    for row in range(ROWS):
         row_display = ranks[row] + "|"
-        for col in range(4):
+        for col in range(COLS):
             piece = "●" if chessboard[row][col] else "○"
             row_display += piece + " "
         print(row_display)
@@ -163,8 +165,8 @@ def display_chessboard():
 def find_changes(current_board, previous_board):
     """Find changes between current board and previous board state"""
     changes = []
-    for row in range(2):
-        for col in range(4):
+    for row in range(ROWS):
+        for col in range(COLS):
             if current_board[row][col] != previous_board[row][col]:
                 square = files[col] + ranks[row]
                 old_state = previous_board[row][col]
@@ -225,6 +227,8 @@ def main():
             
     except KeyboardInterrupt:
         print("\nShutting down...")
+
+    finally:
         GPIO.cleanup()
 
 if __name__ == "__main__":
